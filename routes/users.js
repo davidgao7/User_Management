@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'; // generate unique id
 
 const router = express.Router();
 
-const users = []
+let users = []  // const users = [] will not work, because we will be adding/deleteing users
 
 // all routes in usersRoutes will start with /users already
 router.get('/', (req, res) => {
@@ -27,6 +27,27 @@ router.post('/', (req, res) => {
     res.send(`User with the name ${user.firstName} added to the database!`)
 
     // res.send('POST ROUTE REACHED') // send to postman
+});
+
+// anything after /users. will be reached here
+// want get user with id
+// /users/2 for example, will return user with id 2
+router.get('/:id', (req, res) => {
+    const { id } = req.params;
+
+    // find user with id
+    const foundUser = users.find((user) => user.id === id);
+
+    res.send(foundUser);
+}
+);
+
+// user delete route
+router.delete('/:id', (req, res) => {
+    const { id } = req.params;
+    // filter out the user with the id
+    users = users.filter((user) => user.id !== id);
+    res.send(`User with the id ${id} deleted from the database.`);
 });
 
 export default router;
